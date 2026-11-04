@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-icon">C</span><div><strong>CampusDesk</strong><small>College Management</small></div></div>
+    <p class="nav-label">WORKSPACE</p>
+    <button class="nav-item active" data-view="dashboard">▦ <span>Dashboard</span></button>
+    <button class="nav-item" data-view="students">♙ <span>Students</span></button>
+    <button class="nav-item" data-view="courses">▤ <span>Courses</span></button>
+    <button class="nav-item" data-view="faculty">♧ <span>Faculty</span></button>
+    <button class="nav-item" data-view="reports">▥ <span>Reports</span></button>
+    <div class="sidebar-bottom"><span class="status-dot"></span> MySQL database connection</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">ACADEMIC ADMINISTRATION</span><h1 id="page-title">Dashboard</h1></div><div class="profile"><span class="avatar">AD</span><div><strong>Administrator</strong><small>MCA Project Demo</small></div></div></header>
+    <div id="message" class="message hidden" role="status"></div>
+
+    <section id="dashboard-view" class="view">
+      <div class="welcome"><div><p class="eyebrow light">COLLEGE OVERVIEW</p><h2>Welcome to CampusDesk</h2><p>Manage students, courses and faculty from one place.</p></div><div class="welcome-mark">✦</div></div>
+      <div class="stats">
+        <article class="stat-card"><span class="stat-icon purple">♙</span><p>Total Students</p><strong id="stat-students">—</strong><small>Registered students</small></article>
+        <article class="stat-card"><span class="stat-icon blue">▤</span><p>Total Courses</p><strong id="stat-courses">—</strong><small>Available courses</small></article>
+        <article class="stat-card"><span class="stat-icon orange">♧</span><p>Total Faculty</p><strong id="stat-faculty">—</strong><small>Faculty members</small></article>
+        <article class="stat-card"><span class="stat-icon green">✓</span><p>Enrollments</p><strong id="stat-enrollments">—</strong><small>Course registrations</small></article>
+      </div>
+      <div class="panel"><div class="panel-heading"><div><h3>Students by course</h3><p>SQL GROUP BY report</p></div><button class="btn btn-light" data-view="reports">View reports →</button></div><div id="course-summary" class="table-wrap"><p class="muted pad">Loading report…</p></div></div>
+      <div class="note"><strong>Demo tip:</strong> Use the menu to add or update records. Sample data is included in <code>database.sql</code>.</div>
+    </section>
+
+    <section id="students-view" class="view hidden">
+      <div class="panel"><div class="panel-heading"><div><h3>Student records</h3><p>Create, search, edit and delete students</p></div><button id="add-student" class="btn btn-primary">+ Add student</button></div>
+        <div class="toolbar"><input id="student-search" placeholder="Search name, roll number, email…" aria-label="Search students"><button id="student-search-btn" class="btn btn-light">Search</button><button id="student-clear-btn" class="btn btn-light">Clear</button></div>
+        <div id="students-table" class="table-wrap"></div>
+      </div>
+      <div id="student-form-panel" class="panel hidden"><div class="panel-heading"><div><h3 id="student-form-title">Add student</h3><p>Fields marked * are required</p></div><button class="btn btn-light" id="cancel-student">Cancel</button></div>
+        <form id="student-form" class="form-grid">
+          <input type="hidden" id="student-id">
+          <label>Roll number *<input id="roll_no" required maxlength="30"></label>
+          <label>Full name *<input id="full_name" required maxlength="120"></label>
+          <label>Email *<input id="email" type="email" required maxlength="150"></label>
+          <label>Phone<input id="phone" maxlength="20"></label>
+          <label>Gender<select id="gender"><option>Prefer not to say</option><option>Female</option><option>Male</option><option>Other</option></select></label>
+          <label>Admission date *<input id="admission_date" type="date" required></label>
+          <label>Course<select id="course_id"><option value="">No course selected</option></select></label>
+          <div class="form-actions"><button class="btn btn-primary" type="submit">Save student</button><button class="btn btn-light" type="button" id="reset-student">Reset</button></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="courses-view" class="view hidden">
+      <div class="panel"><div class="panel-heading"><div><h3>Course records</h3><p>Manage course names, codes and fees</p></div><button id="add-course" class="btn btn-primary">+ Add course</button></div>
+        <div id="courses-table" class="table-wrap"></div>
+      </div>
+      <div id="course-form-panel" class="panel hidden"><div class="panel-heading"><h3 id="course-form-title">Add course</h3><button id="cancel-course" class="btn btn-light">Cancel</button></div>
+        <form id="course-form" class="form-grid">
+          <input type="hidden" id="course-id">
+          <label>Course code *<input id="course_code" required maxlength="20"></label>
+          <label>Course name *<input id="course_name" required maxlength="120"></label>
+          <label>Duration (years) *<input id="duration_years" type="number" min="1" max="10" value="2" required></label>
+          <label>Fees (₹) *<input id="fees" type="number" min="0" step="0.01" value="0" required></label>
+          <label>Department<select id="course_department_id"><option value="">No department</option></select></label>
+          <div class="form-actions"><button class="btn btn-primary" type="submit">Save course</button><button class="btn btn-light" type="button" id="reset-course">Reset</button></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="faculty-view" class="view hidden">
+      <div class="panel"><div class="panel-heading"><div><h3>Faculty records</h3><p>Manage faculty and department details</p></div><button id="add-faculty" class="btn btn-primary">+ Add faculty</button></div><div id="faculty-table" class="table-wrap"></div></div>
+      <div id="faculty-form-panel" class="panel hidden"><div class="panel-heading"><h3 id="faculty-form-title">Add faculty</h3><button id="cancel-faculty" class="btn btn-light">Cancel</button></div>
+        <form id="faculty-form" class="form-grid">
+          <input type="hidden" id="faculty-id">
+          <label>Employee code *<input id="employee_code" required maxlength="30"></label>
+          <label>Full name *<input id="faculty_name" required maxlength="120"></label>
+          <label>Email *<input id="faculty_email" type="email" required maxlength="150"></label>
+          <label>Phone<input id="faculty_phone" maxlength="20"></label>
+          <label>Designation *<input id="designation" required maxlength="80"></label>
+          <label>Department<select id="faculty_department_id"><option value="">No department</option></select></label>
+          <div class="form-actions"><button class="btn btn-primary" type="submit">Save faculty</button><button class="btn btn-light" type="button" id="reset-faculty">Reset</button></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="reports-view" class="view hidden">
+      <div class="panel"><div class="panel-heading"><div><h3>Course enrollment report</h3><p>Counts students in each course using GROUP BY</p></div></div><div id="report-course-table" class="table-wrap"></div></div>
+      <div class="panel"><div class="panel-heading"><div><h3>Student result report</h3><p>Shows sample marks and grades from related tables</p></div></div><div id="report-results-table" class="table-wrap"></div></div>
+    </section>
+    <footer>CampusDesk · MCA SQL Project · For academic demonstration</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
